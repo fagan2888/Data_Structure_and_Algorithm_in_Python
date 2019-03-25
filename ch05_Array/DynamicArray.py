@@ -37,6 +37,8 @@ class DynamicArray:
                     self._A[j] = self._A[j+1]
                 self._A[self._n - 1] = None
                 self._n -= 1
+                if self._n <= self._capacity / 4:
+                    self._resize(self._capacity / 2)
                 return
         raise ValueError('value not found')
 
@@ -45,6 +47,8 @@ class DynamicArray:
             tmp = copy.deepcopy(self._A[self._n - 1])
             self._A[self._n - 1] = None
             self._n -= 1
+            if self._n <= self._capacity / 4:
+                self._resize(self._capacity / 2)
             return tmp
         elif len(args) == 1:
             if isinstance(args[0], int):
@@ -54,6 +58,8 @@ class DynamicArray:
                     self._A[j] = self._A[j+1]
                 self._A[self._n - 1] = None
                 self._n -= 1
+                if self._n <= self._capacity / 4:
+                    self._resize(self._capacity / 2)
                 return tmp
             else:
                 raise TypeError('cannot be converted to integer')
