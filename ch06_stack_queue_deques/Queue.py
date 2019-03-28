@@ -51,7 +51,6 @@ class ArrayQueue:
         self._front = 0
 
     def __str__(self):
-
         lst = 'Queue<{}>'.format(', '.join(
             str(self._data[(self._front + i) % len(self._data)]) for i in range(self._size)))
         return lst

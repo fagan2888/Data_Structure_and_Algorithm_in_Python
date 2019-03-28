@@ -28,6 +28,15 @@ class ArrayStack:
             raise Empty('Stack is empty')
         return self._data.pop()
 
+    def transfer(self, other):
+        if not isinstance(other, ArrayStack):
+            raise TypeError('Not an ArrayStack.')
+        while not self.is_empty():
+            other.push(self.pop())
+
+    def __str__(self):
+        return '<' + ','.join(str(e) for e in self._data) + '>'
+
 
 def reverse_file(file_name):
     S = ArrayStack()
@@ -40,8 +49,17 @@ def reverse_file(file_name):
             f.write(S.pop() + '\n')
 
 
+def recursive_remove(s):
+    if s.is_empty():
+        return
+    s.pop()
+    recursive_remove(s)
+
+
 if __name__ == "__main__":
     S = ArrayStack()
+    B = ArrayStack()
+
     S.push(5)
     S.push(3)
     print(len(S))
@@ -56,5 +74,12 @@ if __name__ == "__main__":
     print(len(S))
     print(S.pop())
     S.push(6)
+    print(S)
+    B.push(111)
+    S.transfer(B)
+    print(S)
+    print(B)
+    recursive_remove(B)
+    print(B)
 
-    reverse_file('tt')
+    # reverse_file('tt')
