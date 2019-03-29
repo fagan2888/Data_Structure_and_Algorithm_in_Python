@@ -16,6 +16,7 @@ class LinkedQueue:
         self._size = 0
 
     def __len__(self):
+        """O(1)"""
         return self._size
 
     def is_empty(self):
