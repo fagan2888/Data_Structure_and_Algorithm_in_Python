@@ -44,3 +44,32 @@ class LinkedStack:
         self._head = self._head._next
         self._size -= 1
         return answer
+
+    def __str__(self):
+        cur = self._head
+        res = []
+        while cur:
+            res.append(str(cur._element))
+            cur = cur._next
+        return '<' + ','.join(res) + '>'
+
+
+def find_second_to_last(L):
+    if len(L) <= 1:
+        return None
+
+    res = []
+    cur = L._head._next
+    while cur:
+        res.append(cur._element)
+        cur = cur._next
+
+    return res
+
+
+if __name__ == "__main__":
+    l = LinkedStack()
+    for i in range(2):
+        l.push(i)
+    print(l)
+    print(find_second_to_last(l))

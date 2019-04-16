@@ -11,6 +11,12 @@ class _DoublyLinkedBase:
             self._prev = prev
             self._next = next_
 
+        def __str__(self):
+            if self._element:
+                return str(self._element)
+            else:
+                return ''
+
     def __init__(self):
         self._header = self._Node(None, None, None)
         self._trailer = self._Node(None, None, None)
@@ -79,3 +85,26 @@ class LinkedDeque(_DoublyLinkedBase):
         if self.is_empty():
             raise Empty('Deque is empty')
         self._delete_node(self._trailer._prev)
+
+
+def find_middle(ld):
+    if len(ld) == 0:
+        return None
+    if len(ld) % 2 == 0:
+        left = ld._header
+        right = ld._trailer._prev
+    else:
+        left = ld._header
+        right = ld._trailer
+
+    while left != right:
+        left = left._next
+        right = right._prev
+
+    return left
+
+if __name__ == "__main__":
+    ld = LinkedDeque()
+    # for i in range(10):
+    #     ld.insert_first(i)
+    print(find_middle(ld))

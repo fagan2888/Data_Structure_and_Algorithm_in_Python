@@ -47,6 +47,22 @@ class LinkedQueue:
         self._tail = newest
         self._size += 1
 
+    def rotate(self):
+        if len(self) > 1:
+            new_head = self._head._next
+            self._head._next = None
+            self._tail._next = self._head
+            self._tail = self._head
+            self._head = new_head
+
+    def __str__(self):
+        str_lst = []
+        cur = self._head
+        while cur:
+            str_lst.append(str(cur._element))
+            cur = cur._next
+        return ', '.join(str_lst)
+
 
 if __name__ == "__main__":
     lg = LinkedQueue()
@@ -61,3 +77,12 @@ if __name__ == "__main__":
     print(lg.dequeue())
     print(lg.dequeue())
     print(lg.is_empty())
+    lg.enqueue(2)
+    lg.enqueue(3)
+    lg.enqueue(5)
+    print(lg)
+    lg.rotate()
+    print(lg)
+    lg.rotate()
+    print(lg)
+
