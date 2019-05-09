@@ -97,6 +97,7 @@ class Tree:
 
     def __init__(self):
         self._root = None
+        self._size = 0
 
     def __len__(self):
         return self._size
@@ -107,17 +108,16 @@ class Tree:
     def left(self, p):
         if p and p._left:
             return p._left
-        else:
-            return None
 
     def right(self, p):
         if p and p._right:
             return p._right
-        else:
-            return None
 
     def is_leaf(self, p):
         return (p._left is None) and (p._right is None)
+
+    def is_empty(self):
+        return len(self) == 0
 
     def add_root(self, node):
         if self._root:
@@ -183,6 +183,55 @@ class Tree:
             axis.plot([p._left._X, p._X], [p._left._Y, p._Y], 'k-')
         if p._right:
             axis.plot([p._right._X, p._X], [p._right._Y, p._Y], 'k-')
+
+    def pre_next(self, p):
+        if p._left:
+            return p._left
+        else:
+            cur = p
+            while cur and cur._parent._right is cur:
+                cur = cur._parent
+                if not cur._parent:
+                    return cur._parent
+            return cur._parent._right
+
+            # if p._right:
+            #     return p._right
+            # cur = p._parent
+            # last = p
+            # while cur and cur._right is last:
+            #     last = cur
+            #     cur = cur._parent
+            # if cur:
+            #     return cur._right
+            # else:
+            #     return None
+
+    def post_next(self, p):
+        if p._parent and p is p._parent._left:
+            cur = p._parent
+            last = p
+            while cur:
+                if cur._left and cur._left is not last:
+                    cur = cur._left
+                elif cur._right:
+                    cur = cur._right
+                else:
+                    return cur
+        else:
+            return p._parent
+
+    def inv_next(self, p):
+        if p._right:
+            cur = p._right
+            while cur._left:
+                cur = cur._left
+            return cur
+        else:
+            cur = p
+            while cur and cur._parent and cur._parent._right is cur:
+                cur = cur._parent
+            return cur._parent
 
     def create_from_str(self, s):
         """
@@ -273,27 +322,55 @@ class Tree:
         ls1, ls2, rs1, rs2 = s1[:rti], s2[:rti], s1[rti:-1], s2[rti+1:]
         return rts, {'post': ls1, 'in': ls2}, {'post': rs1, 'in': rs2}
 
+
+def is_isomorphic(T1, T2):
+    return _is_isomorphic(T1, T1.root(), T2, T2.root()) > 0
+
+
+def _is_isomorphic(T1, p1, T2, p2):
+    if p1 is None or p2 is None:
+        return False
+    if T1.is_leaf(p1) or T2.is_leaf(p2):
+        if T1.is_leaf(p1) and T2.is_leaf(p2):
+            return True
+        else:
+            return False
+    else:
+        return _is_isomorphic(T1, T1.left(p1), T2, T2.left(p2)) + _is_isomorphic(T1, T1.right(p1), T2, T2.right(p2))
+
+
 if __name__ == "__main__":
-    str_all = {'pre': 'MAXFUN', 'in': 'XAFMNU', 'post': 'XFANUM'}
+    # str_all = {'pre': 'MAXFUN', 'in': 'XAFMNU', 'post': 'XFANUM'}
     T1 = Tree()
     # T1.create_from_str({'pre': 'MAXFUN', 'in': 'XAFMNU'})
     # T1.create_from_str({'in': 'XAFMNU', 'post': 'XFANUM'})
-    T1.create_from_str({'pre': 'MAXFUN', 'post': 'XFANUM'})
-    T1.graphize()
-    # r = T1.add_root(6)
-    # l1 = T1.add_left(r, 4)
-    # r1 = T1.add_right(r, 3)
-    # T1.add_left(l1, 8)
-    # T1.add_right(l1, 89)
-    # T1.add_right(r1, 9)
-    # # T1.display()
+    # T1.create_from_str({'pre': 'MAXFUN', 'post': 'XFANUM'})
+    # T1.graphize()
+    a = T1.add_root('A')
+    b = T1.add_left(a, 'B')
+    c = T1.add_right(a, 'C')
+    d = T1.add_left(b, 'D')
+    e = T1.add_right(b, 'E')
+    f = T1.add_left(e, 'F')
+    g = T1.add_right(e, 'G')
+    # T1.graphize()
+    print(T1.pre_next(a))
+    print(T1.pre_next(b))
+    print(T1.pre_next(c))
+    print(T1.pre_next(d))
+    print(T1.pre_next(e))
+    print(T1.pre_next(f))
+    print(T1.pre_next(g))
+
 
     # T2 = Tree()
     # r = T2.add_root(6)
     # l1 = T2.add_left(r, 4)
     # r1 = T2.add_right(r, 3)
-    # T2.add_left(l1, 8)
-    # # T2.display()
+    # # T2.add_right(r1, 8)
+    # T2.display()
+
+    # print(is_isomorphic(T1, T2))
 
     # T3 = Tree()
     # r = T3.add_root(7)
